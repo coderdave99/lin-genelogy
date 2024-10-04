@@ -2,10 +2,11 @@
 export async function render(data, opt) {
   let { width, onNodeClick = () => {} } = opt || {};
   const margin = 60;
+  const fontSize = 12;
 
   const hierarchy = d3.hierarchy(data);
   // deeper the hierarchy, we need more space to draw
-  if (!width) width = hierarchy.height * 200;
+  if (!width) width = hierarchy.height * 250;
 
   const height = width;
   const cx = width * 0.5;
@@ -31,7 +32,7 @@ export async function render(data, opt) {
     .attr("viewBox", [-cx, -cy, width, height])
     .attr(
       "style",
-      `width: ${width}px; height: ${height}px; font: 10px sans-serif;`
+      `width: ${width}px; height: ${height}px; font: ${fontSize}px sans-serif;`
     );
 
   svg
@@ -84,15 +85,36 @@ export async function render(data, opt) {
         })`
     )
     .attr("dy", "0.31em")
-    .attr("x", (d) => (d.x < Math.PI === !d.children ? 6 : -6))
-    .attr("text-anchor", (d) =>
-      d.x < Math.PI === !d.children ? "start" : "end"
-    )
+    .attr("x", (d) => (d.x < Math.PI ? 6 : -6))
+    .attr("text-anchor", (d) => (d.x < Math.PI ? "start" : "end"))
     .attr("paint-order", "stroke")
     .attr("stroke", "white")
     .attr("fill", "currentColor")
-    .style("font-size", "10px")
     .text((d) => d.data.data.name)
     .style("cursor", "pointer")
     .on("click", (e, d) => onNodeClick(d));
+
+  // Append partner labels.
+  svg
+    .append("g")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-width", 1)
+    .selectAll()
+    .data(root.descendants())
+    .join("text")
+    .attr(
+      "transform",
+      (d) =>
+        `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0) rotate(${
+          d.x >= Math.PI ? 180 : 0
+        })`
+    )
+    .attr("dy", "0.31em")
+    //.attr("x", (d) => (d.x < Math.PI === !d.children ? 6 : -6))
+    .attr("x", (d) => (d.x < Math.PI ? -6 : 6))
+    .attr("text-anchor", (d) => (d.x < Math.PI ? "end" : "start"))
+    .attr("paint-order", "stroke")
+    .attr("stroke", "white")
+    .attr("fill", "red")
+    .text((d) => d.data.data.partnerName);
 }

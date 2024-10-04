@@ -20,7 +20,7 @@ export async function loadData(opt) {
 
   const table = d3.csvParseRows(csv, (row) => {
     // process each row as follows
-    const [id, name, isMale, siblingRank, fatherId] = row.map(
+    const [id, name, isMale, siblingRank, fatherId, partnerName] = row.map(
       (s) => s.replace(/"/g, "") // remove extra quotes
     );
 
@@ -30,6 +30,7 @@ export async function loadData(opt) {
       isMale: isMale.toLowerCase() === "true",
       siblingRank: Number(siblingRank),
       fatherId: Number(fatherId) || null,
+      partnerName,
     };
   });
 

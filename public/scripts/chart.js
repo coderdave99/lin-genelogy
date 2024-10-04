@@ -73,7 +73,7 @@ export async function render(data, opt) {
   svg
     .append("g")
     .attr("stroke-linejoin", "round")
-    .attr("stroke-width", 1)
+    .attr("stroke-width", 2)
     .selectAll()
     .data(root.descendants())
     .join("text")
@@ -98,7 +98,7 @@ export async function render(data, opt) {
   svg
     .append("g")
     .attr("stroke-linejoin", "round")
-    .attr("stroke-width", 1)
+    .attr("stroke-width", 2)
     .selectAll()
     .data(root.descendants())
     .join("text")

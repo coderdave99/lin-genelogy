@@ -77,13 +77,12 @@ export async function render(data, opt) {
     .selectAll()
     .data(root.descendants())
     .join("text")
-    .attr(
-      "transform",
-      (d) =>
-        `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y},0) rotate(${
-          d.x >= Math.PI ? 180 : 0
-        })`
-    )
+    .attr("transform", (d) => {
+      const yOffset = d.data.data.partnerName ? -(fontSize / 3 + 1) : 0;
+      return `rotate(${(d.x * 180) / Math.PI - 90}) translate(${
+        d.y
+      }, ${yOffset}) rotate(${d.x >= Math.PI ? 180 : 0})`;
+    })
     .attr("dy", "0.31em")
     .attr("x", (d) => (d.x < Math.PI ? 6 : -6))
     .attr("text-anchor", (d) => (d.x < Math.PI ? "start" : "end"))
@@ -102,17 +101,15 @@ export async function render(data, opt) {
     .selectAll()
     .data(root.descendants())
     .join("text")
-    .attr(
-      "transform",
-      (d) =>
-        `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0) rotate(${
-          d.x >= Math.PI ? 180 : 0
-        })`
-    )
+    .attr("transform", (d) => {
+      const yOffset = d.data.data.partnerName ? (fontSize / 3) * 2 + 1 : 0;
+      return `rotate(${(d.x * 180) / Math.PI - 90}) translate(${
+        d.y
+      }, ${yOffset}) rotate(${d.x >= Math.PI ? 180 : 0})`;
+    })
     .attr("dy", "0.31em")
-    //.attr("x", (d) => (d.x < Math.PI === !d.children ? 6 : -6))
-    .attr("x", (d) => (d.x < Math.PI ? -6 : 6))
-    .attr("text-anchor", (d) => (d.x < Math.PI ? "end" : "start"))
+    .attr("x", (d) => (d.x < Math.PI ? 6 : -6))
+    .attr("text-anchor", (d) => (d.x < Math.PI ? "start" : "end"))
     .attr("paint-order", "stroke")
     .attr("stroke", "white")
     .attr("fill", "red")

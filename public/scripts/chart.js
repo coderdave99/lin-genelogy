@@ -1,7 +1,7 @@
 // Declare the x (horizontal position) scale.
 export async function render(data, opt) {
   let { width, onNodeClick = () => {} } = opt || {};
-  const margin = 30;
+  const margin = 60;
 
   const hierarchy = d3.hierarchy(data);
   // deeper the hierarchy, we need more space to draw

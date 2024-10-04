@@ -12,6 +12,8 @@ import { loadData } from "./dataSource.js";
     rootId: params.get("root") ?? 1,
   });
 
+  if (root) d3.select("#title").text(root.data.name + " 派下");
+
   await render(root, {
     onNodeClick(node) {
       document.location = `?id=${params.get("id")}&root=${node.data.id}`;

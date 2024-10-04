@@ -1,6 +1,7 @@
 // Declare the x (horizontal position) scale.
 export async function render(data, opt) {
   let { width, onNodeClick = () => {} } = opt || {};
+  const margin = 30;
 
   const hierarchy = d3.hierarchy(data);
   // deeper the hierarchy, we need more space to draw
@@ -9,7 +10,7 @@ export async function render(data, opt) {
   const height = width;
   const cx = width * 0.5;
   const cy = height * 0.5;
-  const radius = Math.min(width, height) / 2 - 30;
+  const radius = Math.min(width, height) / 2 - margin;
 
   // Create a radial tree layout. The layout’s first dimension (x)
   // is the angle, while the second (y) is the radius.
@@ -26,11 +27,13 @@ export async function render(data, opt) {
     .select("#chart")
     .attr("width", width)
     .attr("height", height)
+    // move the origin to the center of the SVG element
     .attr("viewBox", [-cx, -cy, width, height])
     .attr(
       "style",
-      `width: ${width}px; height: ${height}px; font: 10px sans-serif;`,
+      `width: ${width}px; height: ${height}px; font: 10px sans-serif;`
     );
+
   svg
     .append("g")
     .attr("fill", "none")
@@ -45,7 +48,7 @@ export async function render(data, opt) {
       d3
         .linkRadial()
         .angle((d) => d.x)
-        .radius((d) => d.y),
+        .radius((d) => d.y)
     );
 
   // Append nodes.
@@ -56,7 +59,7 @@ export async function render(data, opt) {
     .join("circle")
     .attr(
       "transform",
-      (d) => `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y},0)`,
+      (d) => `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y},0)`
     )
     .attr("stroke", (d) => (d.children ? "#555" : "#999"))
     .attr("stroke-width", 1.5)
@@ -76,18 +79,20 @@ export async function render(data, opt) {
     .attr(
       "transform",
       (d) =>
-        `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y},0) rotate(${d.x >= Math.PI ? 180 : 0})`,
+        `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y},0) rotate(${
+          d.x >= Math.PI ? 180 : 0
+        })`
     )
     .attr("dy", "0.31em")
     .attr("x", (d) => (d.x < Math.PI === !d.children ? 6 : -6))
     .attr("text-anchor", (d) =>
-      d.x < Math.PI === !d.children ? "start" : "end",
+      d.x < Math.PI === !d.children ? "start" : "end"
     )
     .attr("paint-order", "stroke")
     .attr("stroke", "white")
     .attr("fill", "currentColor")
     .style("font-size", "10px")
-    .text((d) => d.data.name)
+    .text((d) => d.data.data.name)
     .style("cursor", "pointer")
     .on("click", (e, d) => onNodeClick(d));
 }

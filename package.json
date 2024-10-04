@@ -1,0 +1,11 @@
+{
+  "name": "lin-genelogy",
+  "module": "index.js",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "scripts": {
+    "start": "npx http-server -c-1 -o \"?id=${LIN_GENELOGY_DATASOURCE_ID}\""
+  }
+}
